@@ -1,36 +1,5 @@
-interface ChildNodes {[key: string]: TrieNode}
-
-
-interface TrieNode {
-    letter: string;
-    children: ChildNodes;
-    isLeaf: boolean;
-    weight?: number;
-}
-
-class TrieNode {
-    public constructor(letter: string) {
-        this.letter = letter
-        this.children = {}
-        this.isLeaf = false
-    }
-}
-
-const insertWord = (node: TrieNode, word: string): void => {
-    if (word.length === 0) {
-        if (node.isLeaf) node.weight++
-        else {
-            node.isLeaf = true
-            node.weight = 0
-        }
-    } else {
-        const first = word.charAt(0)
-        if (!node.children[first]) {
-            node.children[first] = new TrieNode(first)
-        }
-        insertWord(node.children[first], word.slice(1))
-    }
-}
+import { insertWord, searchWord, getValidWords} from './helpers'
+import TrieNode from './TrieNode'
 
 class Trie extends TrieNode {
     public constructor() {
@@ -40,12 +9,30 @@ class Trie extends TrieNode {
     public insert(word: string): void {
         insertWord(this, word)
     }
+
+    public predict(prefix: string): string[] {
+        const validPredictionTrie = searchWord(this, prefix)
+        if (!validPredictionTrie) return []
+
+        console.log(JSON.stringify(validPredictionTrie, null, 2))
+        
+
+        let predictions = getValidWords(validPredictionTrie, prefix.slice(0, prefix.length - 1))
+        predictions.sort((p1, p2) => p2.weight - p1.weight)
+        return predictions.map((p) => p.word).slice(0, 3)
+    }
 }
 
 
-const PredictionTrie = new Trie()
 
-const words = ["a", "aadvark", "animal", "anteater", "and"]
-words.forEach(word => PredictionTrie.insert(word))
+const demo = (): void => {
+    const PredictionTrie = new Trie()
+    
+    const words = ["a", "aadvark", "animal", "animal", "anteater", "and"]
+    words.forEach((word): void => PredictionTrie.insert(word))
+    
+    const prediction = PredictionTrie.predict('a')
+    console.log(prediction)
+}
 
-console.log(JSON.stringify(PredictionTrie, null, 2))
+demo()
