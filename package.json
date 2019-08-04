@@ -6,11 +6,13 @@
   "author": "mattdean1 <matt.dean.001@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^12.6.9",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "eslint": "eslint@^5.0.0"
   },
   "dependencies": {
+    "csv-parser": "^2.3.0",
     "typescript": "^3.5.3"
   }
 }
