@@ -18,7 +18,16 @@ const fullDemo = (): void => {
     parseCSV(predictionTrie, () => {
         console.log('Prediction for top:')
         console.log(predictionTrie.predict('top'))
+
+        const stdin = process.stdin
+        stdin.setEncoding('utf-8')
+        console.log("Enter a word to predict")
+        stdin.on('data', function (data) {
+            console.log(predictionTrie.predict(data.trim()))
+        })
     })
+
+
     
 }
 
